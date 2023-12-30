@@ -1,3 +1,15 @@
 # ninja log v5
-1	1679	7253620770067957	CMakeFiles/tsp_genetic_part3.dir/main.cpp.obj	1a3fe8d84a97a93f
-1683	1857	7253620771789629	tsp_genetic_part3.exe	63aa2c294c7f622f
+7	898	7256349927759329	CMakeFiles/tsp_genetic_part3.dir/main.cpp.obj	1a3fe8d84a97a93f
+16	826	7253878280078597	CMakeFiles/tsp_genetic_part3.dir/FileReader.cpp.obj	86b24d29e57affd5
+22	1213	7253878283989917	CMakeFiles/tsp_genetic_part3.dir/Graph.cpp.obj	9c6ceb6ae6567c7b
+5	1372	7253878285589469	CMakeFiles/tsp_genetic_part3.dir/Data_parser.cpp.obj	3eec9e357096c367
+1942	2291	7256815056339470	tsp_genetic_part3.exe	39b49b4171e1c634
+6	1394	7256811646513534	CMakeFiles/tsp_genetic_part3.dir/GeneticAlgo.cpp.obj	5c3538389916c563
+11	1130	7253878631784625	CMakeFiles/tsp_genetic_part3.dir/Time_measure.cpp.obj	411ffa6c5df84611
+28	1454	7253878286411042	CMakeFiles/tsp_genetic_part3.dir/DataGenerator.cpp.obj	8cf00fe09be18922
+34	829	7253878280099505	CMakeFiles/tsp_genetic_part3.dir/OptionMenu.cpp.obj	a287773d4f61777c
+15	723	7253878627694406	CMakeFiles/tsp_genetic_part3.dir/Write_to_csv.cpp.obj	3f53d2de443cbd50
+5	1940	7256815052856370	CMakeFiles/tsp_genetic_part3.dir/Menu.cpp.obj	77b245e9f6f8c499
+20	1518	7256820231296364	CMakeFiles/tsp_genetic_part3.dir/Brute_force.cpp.obj	e18d200c1d70d07c
+6	1716	7256820233283041	CMakeFiles/tsp_genetic_part3.dir/Menu.cpp.obj	77b245e9f6f8c499
+1716	2066	7256820236723289	tsp_genetic_part3.exe	83df42a0306b0b2
