@@ -10,6 +10,10 @@ void Menu::show_menu() {
 
     DataGenerator generator;
     Graph graph(init_vector);
+    GeneticAlgo * genPtr;
+    std::vector<std::vector<double>> double2DVector;
+
+
 
     std::string fromFile;
     std::string choice_s;
@@ -49,13 +53,14 @@ void Menu::show_menu() {
                 Data_parser dataParser(choice_s);
                 dataParser.openFile();
                 graph.setGraph(dataParser.readFile());
-
-                std::vector<std::vector<double>> double2DVector;
+                while(!double2DVector.empty())
+                {
+                    double2DVector.pop_back();
+                }
                 for (const auto& row : graph.getGraph()) {
                     std::vector<double> doubleRow(row.begin(), row.end());
                     double2DVector.push_back(doubleRow);
                 }
-                GeneticAlgo geneticAlgo(double2DVector, 5);
 
 //                graph.readGraph(choice_s);
             }
@@ -69,12 +74,17 @@ void Menu::show_menu() {
                     std::cin >> choice_s;
                 }
                 graph.setGraph(generator.generate_data(atoi(choice_s.c_str())));
-                std::vector<std::vector<double>> double2DVector;
+                while(!double2DVector.empty())
+                {
+                    double2DVector.pop_back();
+                }
                 for (const auto& row : graph.getGraph()) {
                     std::vector<double> doubleRow(row.begin(), row.end());
                     double2DVector.push_back(doubleRow);
                 }
-                GeneticAlgo geneticAlgo(double2DVector, 5);
+
+
+
         }
                 break;
             case 3:
@@ -82,74 +92,30 @@ void Menu::show_menu() {
                 graph.printGraph();
                 break;
             case 4: {
-                std::vector<std::vector<double>> double2DVector;
-                for (const auto& row : graph.getGraph()) {
-                    std::vector<double> doubleRow(row.begin(), row.end());
-                    double2DVector.push_back(doubleRow);
-                }
-                GeneticAlgo geneticAlgo(double2DVector, 5);
-                for(int i=0;i<100;i++) {
-                    geneticAlgo.calculateFitness();
-                    geneticAlgo.normalizeFitness();
-                    geneticAlgo.nextGeneration();
 
+                genPtr = new GeneticAlgo(double2DVector, graph.getNumOfVertices());
+cout<< graph.getNumOfVertices();
+                cout<< double2DVector.size();
+
+                for(int i=0;i<1000;i++) {
+                    genPtr->calculateFitness();
+                    genPtr->normalizeFitness();
+                    genPtr->nextGeneration();
+//                    cout<<endl<<genPtr->recordDistance<< endl;
+//                    for(int i=0;i<genPtr->bestEver.size();i++)
+//                    {
+//                        cout<<genPtr->population[24][i]<<" ";
+//                    }
+//                    cout<<endl;
                 }
-                cout<<endl<<geneticAlgo.recordDistance<< endl;
-                for(int i=0;i<geneticAlgo.bestEver.size();i++)
+                cout<<endl<<genPtr->recordDistance<< endl;
+                for(int i=0;i<genPtr->bestEver.size();i++)
                 {
-                    cout<<geneticAlgo.bestEver[i]<<" ";
+                    cout<<genPtr->bestEver[i]<<" ";
                 }
                 cout<<endl;
-//                for(int i=0;i<geneticAlgo.bestEver.size();i++)
-//                {
-//                    cout<<geneticAlgo.bestCheck[i]<<" ";
-//                }
-//                cout<<endl;
-
-//                SimulatedAnnealing simulatedAnnealing(graph.getGraph());
-
-//                for(int h=0;h<10;h++) {
-
-//                    graph.setGraph(generator.generate_data(choice_ss));
-
-
-
-
-                    int sV, e, t, iE;
-//                    std::cout << "Podaj startowy wierzcholek \n";
-//                    cin >> sV;
-//                    std::cout << "Podaj alfe \n";
-//                    cin >> a;
-//                    std::cout << "Podaj liczbe epok \n";
-//                    cin >> e;
-//                    std::cout << "Podaj liczbe iteracji w epoce \n";
-//                    cin >> iE;
-//                    std::cout << "Podaj startowa temperature \n";
-//                    cin >> t;
-//                simulatedAnnealing.startAlgorithm(sV, a, e, iE, t);
-
-
-
-
-
-//                    simulatedAnnealing.showPath(0);
-//                cout<<endl<<simulatedAnnealing.getFinalCost()<<endl;
-//                    simulatedAnnealing.setTemperature(simulatedAnnealing.calculateTemperature());
-
-                    auto start = std::chrono::high_resolution_clock::now();
-//                simulatedAnnealing.startAlgorithm(0, 0.99, 1000, 100000, 1000000, 120 );
-//                auto end = std::chrono::high_resolution_clock::now();
-//                    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+                delete genPtr;
 //
-//
-//                cout<<endl<<simulatedAnnealing.getFinalCost()<<endl;
-//                for(int i=0;i<graph.getNumOfVertices()+1;i++)
-//                    cout<<simulatedAnnealing.getGlobalPath()->at(i)<<"->";
-//
-//                    cout<<endl<<duration.count()<<endl;
-//                    cout<<simulatedAnnealing.getTemperature()<<endl;
-
-//                }
             }
 
                 break;

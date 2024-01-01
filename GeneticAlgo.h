@@ -8,24 +8,26 @@
 
 
 class GeneticAlgo {
+public:
+     ~GeneticAlgo();
 
-      int totalCities;
+private:
+    int totalCities;
     std::vector<std::vector<double>> inputGraph;
 
-     std::vector<std::vector<double>> population;
      std::vector<double> fitness;
 
     double calcDistance(const std::vector<double>& points, std::vector<std::vector<double>> );
 
     void swap(std::vector<double>& order, double indexA, double indexB);
 
-    std::vector<double> pickOne(const std::vector<std::vector<double>>& list, const std::vector<double>& prob);
 
-    std::vector<double> crossOver(const std::vector<double>& orderA, const std::vector<double>& orderB);
 
     void mutate(std::vector<double>& order, double mutationRate);
 
 public:
+    std::vector<std::vector<double>> population;
+
     std::vector<double> check;
     std::vector<double> bestCheck;
     std::vector<double> bestEver;
@@ -41,6 +43,10 @@ public:
     void normalizeFitness();
 
     void mutate(std::vector<double> &order, int mutationRate);
+
+    std::vector<double> pickOne(std::vector<std::vector<double>> list, std::vector<double> prob);
+
+    std::vector<double> crossOver(std::vector<double> orderA, std::vector<double> orderB);
 };
 
 
