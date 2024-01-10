@@ -93,27 +93,37 @@ void Menu::show_menu() {
                 break;
             case 4: {
 
-                genPtr = new GeneticAlgo(double2DVector, graph.getNumOfVertices());
+                genPtr = new GeneticAlgo(double2DVector, graph.getNumOfVertices(), 50, 0.5);
 cout<< graph.getNumOfVertices();
                 cout<< double2DVector.size();
+                auto ittt = genPtr->populationDictionary.begin();
 
-                for(int i=0;i<1000;i++) {
+                for(int i=0;i<10000;i++) {
+                    auto ittt = genPtr->populationDictionary.begin();
+
                     genPtr->calculateFitness();
-                    genPtr->normalizeFitness();
+//                    genPtr->normalizeFitness();
                     genPtr->nextGeneration();
 //                    cout<<endl<<genPtr->recordDistance<< endl;
-//                    for(int i=0;i<genPtr->bestEver.size();i++)
-//                    {
-//                        cout<<genPtr->population[24][i]<<" ";
-//                    }
+                    for(int i=0;i<genPtr->populationDictionary.size();i++)
+                    {
+                        cout<<ittt->first<<endl;
+                        advance(ittt,1);
+                    }
+                    cout<<endl<<endl;
 //                    cout<<endl;
                 }
+//                cout<<1234;
                 cout<<endl<<genPtr->recordDistance<< endl;
-                for(int i=0;i<genPtr->bestEver.size();i++)
-                {
-                    cout<<genPtr->bestEver[i]<<" ";
-                }
-                cout<<endl;
+                auto it = genPtr->populationDictionary.begin();
+
+                cout<<endl<<it->first<< endl;
+
+//                for(int i=0;i<genPtr->bestEver.size();i++)
+//                {
+//                    cout<<genPtr->bestEver[i]<<" ";
+//                }
+//                cout<<endl;
                 delete genPtr;
 //
             }

@@ -5,11 +5,16 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <map>
 
 
 class GeneticAlgo {
 public:
-     ~GeneticAlgo();
+    GeneticAlgo(std::vector<std::vector<double>> input, int cities, int population_nr);
+
+    GeneticAlgo(std::vector<std::vector<double>> input, int cities, int population_nr, double crossRate);
+
+    ~GeneticAlgo();
 
 private:
     int totalCities;
@@ -26,8 +31,13 @@ private:
     void mutate(std::vector<double>& order, double mutationRate);
 
 public:
-    std::vector<std::vector<double>> population;
+    std::map<double, std::vector<double>> populationDictionary;
 
+    std::vector<double> sorted_population;
+    std::vector<double> sorted_distances;
+int population_number;
+    std::vector<std::vector<double>> population;
+    double crossRate;
     std::vector<double> check;
     std::vector<double> bestCheck;
     std::vector<double> bestEver;
@@ -47,6 +57,8 @@ public:
     std::vector<double> pickOne(std::vector<std::vector<double>> list, std::vector<double> prob);
 
     std::vector<double> crossOver(std::vector<double> orderA, std::vector<double> orderB);
+
+    std::vector<double> pickOne(std::vector<std::vector<double>> list, std::vector<double> prob, bool biggest);
 };
 
 
