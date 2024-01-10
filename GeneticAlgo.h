@@ -18,7 +18,6 @@ public:
 
 private:
     int totalCities;
-    std::vector<std::vector<double>> inputGraph;
 
      std::vector<double> fitness;
 
@@ -31,11 +30,13 @@ private:
     void mutate(std::vector<double>& order, double mutationRate);
 
 public:
+    std::vector<std::vector<double>> inputGraph;
+
     std::map<double, std::vector<double>> populationDictionary;
 
     std::vector<double> sorted_population;
     std::vector<double> sorted_distances;
-int population_number;
+ int population_number;
     std::vector<std::vector<double>> population;
     double crossRate;
     std::vector<double> check;

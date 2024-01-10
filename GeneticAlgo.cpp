@@ -16,13 +16,12 @@ using namespace std;
 
 double GeneticAlgo::calcDistance(const std::vector<double> &points, std::vector<std::vector<double>> input) {
     double sum = 0;
-
+    cout<<123;
     for (int i = 0; i < points.size() - 1; i++) {
         sum += input[points[i]][points[i + 1]];
-        check.push_back(input[points[i]][points[i + 1]]);
     }
+
     sum += input[points[points.size() - 1]][points[0]];
-    check.push_back(input[points[points.size() - 1]][points[0]]);
 
     return sum;
 }
@@ -39,27 +38,16 @@ void GeneticAlgo::calculateFitness() {
 
     int currentRecord = INFINITY;
     for (int i = 0; i < (population.size()-population_number); i++) {
-//        cout<<123<<endl;
+        cout<<"woda";
 
         double d = calcDistance(population[i+population_number], inputGraph);
-//        int index=0;
-//        while(  index<sorted_distances.size()) {
-//            if(d<sorted_distances[index])
-//            {
-//                index++;
-//                break;
-//            }
-//            index++;
-//        }
-//        index--;
+        cout<<"woda"<<endl;
 
-
-
-//        sorted_distances.insert(sorted_distances.begin()+index,d);
-//        sorted_population.insert(sorted_population.begin()+index, i);
 
             double key = d;
-            std::vector<double> value = population[i];
+
+            // BABOBL BABOL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!BABOL BABOL !!!!!!!!!!!!!!!!!!!
+            std::vector<double> value = population[i+population_number];
         if(populationDictionary.find(key) == populationDictionary.end()) {
             populationDictionary[key] = value;
         }
@@ -67,17 +55,8 @@ void GeneticAlgo::calculateFitness() {
 //
         if (d < this->recordDistance) {
             this->recordDistance = d;
-            bestEver = population[i];
-
+            bestEver = population[i+population_number];
         }
-
-
-        // This fitness function has been edited from the original to improve performance
-//        fitness[i] = 1 / (pow(d,8) + 1);
-//        cout<<fitness[i];
-//        cout<<recordDistance<<endl;
-
-
     }
 //    while(sorted_population.size()!=population_number) {
 //      //  population.erase(population.begin() + sorted_population.back());
@@ -85,10 +64,11 @@ void GeneticAlgo::calculateFitness() {
 //        sorted_distances.pop_back();
 //    }
 
-    while(population.size()!=population_number)
+    while(population.size()>population_number)
     {
         population.pop_back();
     }
+
 //    cout<<89;
 //    auto index = --populationDictionary.end();
     while(populationDictionary.size()>population_number)
@@ -126,12 +106,13 @@ void GeneticAlgo::normalizeFitness() {
 void GeneticAlgo::nextGeneration() {
 
     int loop_end = int(population_number*crossRate)-1;
-    auto it = populationDictionary.begin();
 
     for (int i = 0; i < int(loop_end/2); i++) {
+        auto it = populationDictionary.begin();
 
         std::vector<double> first =  it->second;
-        advance(it,1);
+
+        advance(it,i);
         std::vector<double> second =  it->second;
 
         std::vector<double> order = crossOver(first,second);
@@ -139,13 +120,34 @@ void GeneticAlgo::nextGeneration() {
 //czy mutate na pewno dziala na pamieci a nie na kopii
 
 //wydluza
-        mutate(order, 0.1);
-        mutate(orderSecond, 0.1);
+
+
+        auto randMut = populationDictionary.begin();
+        int indexToMut = ((std::rand())%(populationDictionary.size()-2)+1);
+
+        advance(randMut, indexToMut);
+        mutate(randMut->second, 0.3);
+        std::vector<double> mutatedPath = randMut->second;
+        int mutDist= calcDistance(mutatedPath,inputGraph);
+        //tu zmiana
+        if(populationDictionary.find(mutDist) == populationDictionary.end()) {
+            populationDictionary.erase(randMut);
+
+        }
+        populationDictionary[mutDist]= mutatedPath;
+
+        //tu zmiana
+//        mutate(orderSecond, 0.3);
+//        mutate(order, 0.3);
+
+
+
+
 
 population.push_back(order);
 population.push_back(orderSecond);
-//sorted_population.push_back(-9);
-//sorted_distances.push_back(INT_MAX);
+//population.push_back(mutatedPath);
+
     }
 
 
@@ -182,7 +184,7 @@ else
 }
 // miszanie jest dobre tyle ze bez pomysli fitness zle dziala, dobre rozwiazania nie sa faworyzowane
 std::vector<double> GeneticAlgo::crossOver( std::vector<double> orderA,  std::vector<double> orderB) {
-    int start = rand() % (orderA.size() -1) ;
+    int start = rand() % (orderA.size() -2) +1;
     int end = rand() % (orderA.size() - start ) + start ;
     //zeby z
     std::vector<double> newOrder(orderA.begin() + start, orderA.begin() + end);
@@ -268,7 +270,7 @@ GeneticAlgo::GeneticAlgo(std::vector<std::vector<double>> input, int cities, int
 
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-
+// jeden zostawiam przez greedy zrobiony
     for (int i = 0; i < population_nr; i++) {
 //        for (int j = 0; j < cities; j++)
 //            this->population[i][j] = j;
