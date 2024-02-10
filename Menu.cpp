@@ -1,7 +1,6 @@
 #include "Menu.h"
 #include "GeneticAlgo.h"
 #include "Data_parser.h"
-#include "Brute_force.h"
 
 void Menu::show_menu() {
     using namespace std;
@@ -129,10 +128,7 @@ cout<< graph.getNumOfVertices();
 
                 break;
             case 5: {
-                Brute_force bruteForce(graph.getGraph());
-                bruteForce.perform_brute_force();
-                cout<<bruteForce.get_lowest_path()<<endl;
-                cout<<bruteForce.get_lowest_cost()<<endl;
+
             }
 
                 break;
