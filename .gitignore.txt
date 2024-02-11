@@ -21,8 +21,4 @@ cmake-build-release/
 .DS_Store
 Thumbs.db
 
-# Ignore specific files that may contain sensitive information or specific configurations
-# For example, if you have a file for local environment variables or configurations
-# local.env
-# config/local.yml
 

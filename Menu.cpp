@@ -1,148 +1,112 @@
 #include "Menu.h"
-#include "GeneticAlgo.h"
+#include <iostream>
+#include <vector>
+#include <string>
+
+#include "DataGenerator.h"
 #include "Data_parser.h"
 
 void Menu::show_menu() {
-    using namespace std;
-    std::vector<std::vector<int>> init_vector;
-    std::vector<int> path;
-
-    DataGenerator generator;
-    Graph graph(init_vector);
-    GeneticAlgo * genPtr;
-    std::vector<std::vector<double>> double2DVector;
-
-
-
-    std::string fromFile;
     std::string choice_s;
-
-    double stop = 5;
-
     while (true) {
-        std::cout
-                << "Problem komiwojazera rozwiazywany metoda symulowanego wyrzazania.\nAutor: Jakub Blaszczynski #263966\n\n";
-        std::cout << "0 - Wyjdz z programu\n";
-        std::cout << "1 - Wczytaj macierz z pliku\n";
-        std::cout << "2 - Wygeneruj macierz\n";
-        std::cout << "3 - Wyswietl ostatnio wczytana z pliku lub wygenerowana macierz\n";
-        std::cout << "4 - Uruchom symulowane wyrzazanie dla ostatnio wczytanej lub wygenerowanej macierzy i wyswietl wyniki\n";
-        std::cout << "5 - Podaj kryterium stopu\n";
-        std::cout << "6 - Ustaw wspolczynnik zmian temperatury\n";
-
-
-        std::cout << ">";
+        std::cout << "Menu for the Traveling Salesman Problem solved with Simulated Annealing.\n";
+        std::cout << "0 - Exit\n";
+        std::cout << "1 - Load matrix from file\n";
+        std::cout << "2 - Generate matrix\n";
+        std::cout << "3 - Display the last loaded or generated matrix\n";
+        std::cout << "4 - Run Genetic Algorithm on the last matrix\n";
+        std::cout << "5 - Set stop criteria (number of iterations)\n";
+        std::cout << "6 - Set temperature change coefficient\n";
+        std::cout << "> ";
 
         std::cin >> choice_s;
-        while (!is_digit(choice_s)) {
-            std::cout << "Podany ciag znakow nie jest liczba!\nWpisz liczbe\n>";
-            std::cin >> choice_s;
+        if (!is_digit(choice_s)) {
+            std::cout << "Invalid input. Please enter a number.\n>";
+            continue;
         }
         int choice = std::stoi(choice_s);
-        double a =0.8;
-
-
 
         switch (choice) {
-            case 0:
-                exit(0);
-            case 1: {
-                std::cout << "Podaj nazwe pliku do wczytania\n>";
-                std::cin >> choice_s;
-                Data_parser dataParser(choice_s);
-                dataParser.openFile();
-                graph.setGraph(dataParser.readFile());
-                while(!double2DVector.empty())
-                {
-                    double2DVector.pop_back();
-                }
-                for (const auto& row : graph.getGraph()) {
-                    std::vector<double> doubleRow(row.begin(), row.end());
-                    double2DVector.push_back(doubleRow);
-                }
-
-//                graph.readGraph(choice_s);
-            }
-
-                break;
-            case 2:{
-                std::cout << "Podaj wielkosc macierzy (rozmiar MAX_CITIES)\n>";
-                std::cin >> choice_s;
-                while (!is_digit(choice_s)) {
-                    std::cout << "Podany ciag znakow nie jest liczba!\nWpisz liczbe\n>";
-                    std::cin >> choice_s;
-                }
-                graph.setGraph(generator.generate_data(atoi(choice_s.c_str())));
-                while(!double2DVector.empty())
-                {
-                    double2DVector.pop_back();
-                }
-                for (const auto& row : graph.getGraph()) {
-                    std::vector<double> doubleRow(row.begin(), row.end());
-                    double2DVector.push_back(doubleRow);
-                }
-
-
-
-        }
-                break;
-            case 3:
-
-                graph.printGraph();
-                break;
-            case 4: {
-
-                genPtr = new GeneticAlgo(double2DVector, graph.getNumOfVertices(), 50, 0.90);
-cout<< graph.getNumOfVertices();
-                cout<< double2DVector.size();
-                auto ittt = genPtr->populationDictionary.begin();
-
-                for(int i=0;i<1000;i++) {
-
-                    genPtr->calculateFitness();
-//                    genPtr->normalizeFitness();
-                    genPtr->nextGeneration();
-                    cout<<endl<<genPtr->recordDistance<< endl;
-//                    for(int i=0;i<genPtr->populationDictionary.size();i++)
-//                    {
-//                        cout<<ittt->first<<endl;
-//                        advance(ittt,1);
-//                    }
-//                    cout<<endl<<endl;
-//                    cout<<endl;
-                }
-//                cout<<1234;
-                cout<<endl<<genPtr->recordDistance<< endl;
-//                auto it = genPtr->populationDictionary.begin();
-
-//                cout<<endl<<it->first<< endl;
-
-//                for(int i=0;i<genPtr->bestEver.size();i++)
-//                {
-//                    cout<<genPtr->bestEver[i]<<" ";
-//                }
-//                cout<<endl;
-                delete genPtr;
-//
-            }
-
-                break;
-            case 5: {
-
-            }
-
-                break;
-            case 6: {
-                cin>>a;
-            }
-
-
-                break;
-            default:
-                std::cout << "Program nie zawiera funkcji dla podanej liczby!\n";
-                break;
+            case 0: exit_program(); break;
+            case 1: load_matrix_from_file(); break;
+            case 2: generate_matrix(); break;
+            case 3: display_matrix(); break;
+            case 4: run_genetic_algorithm(); break;
+            case 5: set_stop_criteria(); break;
+            case 6: set_temperature_change_coefficient(); break;
+            default: std::cout << "Invalid option.\n"; break;
         }
     }
+}
+
+void Menu::exit_program() {
+    std::cout << "Exiting program.\n";
+    exit(0);
+}
+
+void Menu::load_matrix_from_file() {
+    std::string filename;
+    std::cout << "Enter filename: ";
+    std::cin >> filename;
+    Data_parser parser(filename);
+    if (parser.openFile()) {
+        this->graph.setGraph(parser.readFile());
+        this->double2DVector = convert_to_double_vector(this->graph.getGraph());
+    } else {
+        std::cout << "Failed to open file.\n";
+    }
+}
+
+void Menu::generate_matrix() {
+    int size;
+    std::cout << "Enter matrix size: ";
+    std::cin >> size;
+    DataGenerator generator;
+    this->graph.setGraph(generator.generate_data(size));
+    this->double2DVector = convert_to_double_vector(this->graph.getGraph());
+}
+
+void Menu::display_matrix() {
+    if (this->double2DVector.empty()) {
+        std::cout << "Matrix is empty.\n";
+        return;
+    }
+    for (const auto& row : this->double2DVector) {
+        for (double val : row) {
+            std::cout << val << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+void Menu::run_genetic_algorithm() {
+    if (this->double2DVector.empty()) {
+        std::cout << "Matrix is empty. Cannot run Genetic Algorithm.\n";
+        return;
+    }
+    if (this->genPtr != nullptr) delete this->genPtr;
+    this->genPtr = new GeneticAlgo(this->double2DVector, this->graph.getNumOfVertices(), 50, 0.90);
+    algo_cycle(this->iterations, this->genPtr);
+}
+
+void Menu::set_stop_criteria() {
+    std::cout << "Enter number of iterations: ";
+    std::cin >> this->iterations;
+}
+
+void Menu::set_temperature_change_coefficient() {
+    std::cout << "Enter temperature change coefficient: ";
+    std::cin >> this->temperature_change_coefficient;
+}
+
+void Menu::algo_cycle(int iter, GeneticAlgo *genPtr){
+    for (int i = 0; i < iter; i++) {
+
+        genPtr->calculateFitness();
+        genPtr->nextGeneration();
+        std::cout << std::endl << genPtr->getRecordDistance() << std::endl;
+    }
+    std::cout << std::endl << genPtr->getRecordDistance() << std::endl;
 
 }
 
@@ -155,4 +119,13 @@ bool Menu::is_digit(std::string input) {
     }
     return true;
 
+}
+
+std::vector<std::vector<double>> Menu::convert_to_double_vector(const std::vector<std::vector<int>>& intVector) {
+    std::vector<std::vector<double>> doubleVector;
+    for (const auto& row : intVector) {
+        std::vector<double> doubleRow(row.begin(), row.end());
+        doubleVector.push_back(doubleRow);
+    }
+    return doubleVector;
 }

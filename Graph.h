@@ -25,7 +25,6 @@ public:
 private:
     std::vector<std::vector<int>> graph_matrix;
     int num_of_vertices;
-    int optimum;
 
 };
 

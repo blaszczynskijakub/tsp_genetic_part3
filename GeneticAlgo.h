@@ -10,33 +10,39 @@
 
 class GeneticAlgo {
 public:
-    GeneticAlgo(std::vector<std::vector<double>> input, int cities, int population_nr);
 
     GeneticAlgo(std::vector<std::vector<double>> input, int cities, int population_nr, double crossRate);
 
     ~GeneticAlgo();
 
+
+    int getRecordDistance() const;
+
+    void calculateFitness();
+
+    void nextGeneration();
+
+    std::vector<double> crossOver(std::vector<double> orderA, std::vector<double> orderB);
+
 private:
     int totalCities;
 
-     std::vector<double> fitness;
+    std::vector<double> fitness;
 
-    double calcDistance(const std::vector<double>& points, std::vector<std::vector<double>> );
+    double calcDistance(const std::vector<double> &points, std::vector<std::vector<double>>);
 
-    void swap(std::vector<double>& order, double indexA, double indexB);
+    void swap(std::vector<double> &order, double indexA, double indexB);
 
 
+    void mutate(std::vector<double> &order, double mutationRate);
 
-    void mutate(std::vector<double>& order, double mutationRate);
-
-public:
     std::vector<std::vector<double>> inputGraph;
 
     std::map<double, std::vector<double>> populationDictionary;
 
     std::vector<double> sorted_population;
     std::vector<double> sorted_distances;
- int population_number;
+    int population_number;
     std::vector<std::vector<double>> population;
     double crossRate;
     std::vector<double> check;
@@ -45,21 +51,17 @@ public:
 
     int recordDistance = INFINITY;
 
-    GeneticAlgo(std::vector<std::vector<double>> , int);
 
-    void calculateFitness();
 
-    void nextGeneration();
+    void calculateInitialDistances();
 
-    void normalizeFitness();
+    void shufflePopulation(unsigned int &seed);
 
-    void mutate(std::vector<double> &order, int mutationRate);
+    std::vector<double> generateInitialPath();
 
-    std::vector<double> pickOne(std::vector<std::vector<double>> list, std::vector<double> prob);
-
-    std::vector<double> crossOver(std::vector<double> orderA, std::vector<double> orderB);
-
-    std::vector<double> pickOne(std::vector<std::vector<double>> list, std::vector<double> prob, bool biggest);
+    void
+    initializeMembers(int population_nr, double crossRateInput, int cities,
+                      const std::vector<std::vector<double>> &input);
 };
 
 
